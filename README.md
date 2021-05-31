@@ -1,20 +1,40 @@
 # messageBroker
 Little Message Broker
 
-## For Receive project:
+## For Receive (Consumer) project:
 
-1. dotnet ef migrations add InitialCreate
+1. Create Migrations:
 
-2. dotnet ef database update
+```
+dotnet ef migrations add InitialCreate
+```
 
-3. dotnet run
+2. Create Database: 
 
-## For Send project:
+```
+dotnet ef database update
+```
+
+3. Run program to receive messages from 'Send' Project. 
+
+```
+dotnet run
+```
+
+## For Send (Producer) project:
 
 Dummy list of message are inside the project. Adding 10 messages with added second for each new message.
 
-1. dotnet run
+1. To run and then send messages to Receive project.
+
+```
+dotnet run
+```
 
 ## For Testing project:
 
-1. dotnet test
+1. Simple testing for sqlite (in memory).
+
+```
+dotnet test
+```
