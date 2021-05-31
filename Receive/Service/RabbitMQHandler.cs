@@ -58,6 +58,10 @@ public class RabbitMQHandler
 
                     consumer.Received += (model, ea) =>
                     {
+                        // positively acknowledge a single delivery, the message will
+                        // be discarded
+                        channel.BasicAck(ea.DeliveryTag, false);
+
                         var body = ea.Body.ToArray();
                         var jsonified = Encoding.UTF8.GetString(body);
 
@@ -68,13 +72,10 @@ public class RabbitMQHandler
                         if (messageTime.Minute < DateTime.Now.Minute - 1)
                         {
                             Console.WriteLine("Message from sender ID: {0} - with timestamp {1} - is now older than one minute", messageReceived.ID, messageTime.ToString("HH:mm:ss"));
-                            channel.BasicReject(ea.DeliveryTag, false);
                         }
                         else if (!TimeStampHandler.RegulateEvenTimeStamp(messageTime))
                         {
                             Console.WriteLine("Message from sender ID: {0} - with uneven second timestamp {1} - Resending with new timestamp", messageReceived.ID, messageTime.ToString("HH:mm:ss"));
-
-                            channel.BasicAck(ea.DeliveryTag, true);
 
                             Message message = new Message()
                             {
@@ -82,14 +83,13 @@ public class RabbitMQHandler
                                 ID = messageReceived.ID,
                                 Timestamp = DateTime.Now.ToString("HH:mm:ss")
                             };
-
+                            
+                            // requeue the delivery
                             SendMessages(message);
-
                         }
                         else
                         {
                             Console.WriteLine("Message from sender ID: {0} - with even second timestamp {1}", messageReceived.ID, messageTime.ToString("HH:mm:ss"));
-                            channel.BasicAck(ea.DeliveryTag, true);
 
                             MessageHandler.AddMessagesToTable(messageReceived);
                         }
