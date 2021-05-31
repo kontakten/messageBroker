@@ -48,7 +48,7 @@ public class TestReceive
                 var existingMessage = messageDbContext.Messages.SingleOrDefault(m => m.ID == 1);
 
                 existingMessage.Text = "MessageTwo";
-
+                existingMessage.Timestamp = DateTime.Now.ToString("HH:mm:ss");
                 messageDbContext.Messages.Update(existingMessage);
 
                 messageDbContext.SaveChanges();
