@@ -1,7 +1,22 @@
 # messageBroker
 Little Message Broker
 
-## For Receive (Consumer) project:
+## Description
+
+Producer & Consumer - messagebroker.
+
+Purpose: 
+
+Producer app: Produce messages with a timestamp. Producer generates 10 messages in this project.
+
+Consumer app:
+
+Take message out of the queue. 
+* If the timestamp of the message is more than 1 minute old - throw it away.
+* If the timestamp is less than 1 min old and the second hand on the timestamp is an even number, save the message in a database.
+* If the timestamp is less than 1 min old and the second hand on the timestamp is an odd number, then put the message back in the queue with a new timestamp
+
+### For Receive (Consumer) project:
 
 1. Create Migrations:
 
